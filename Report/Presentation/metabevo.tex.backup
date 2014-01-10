@@ -1,0 +1,585 @@
+\documentclass{beamer}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary[topaths]
+
+
+\newcount\mycount
+
+
+\usetheme{Montpellier}
+
+\beamersetuncovermixins{\opaqueness<1>{25}}{\opaqueness<2->{15}}
+\begin{document}
+\title{Frequency Landscapes}  
+\author{Bruno Pace and Konstantin Klemm}
+\date{\today} 
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+\section{Introduction} 
+\begin{frame}\frametitle{Evolution of Regulation}
+\begin{itemize}
+ \item Emergence of gene interaction networks
+ \item Topologies reflect adaptation to their environment - biological computation and problem solving
+ \item Mechanisms for long-term evolution of these control networks 
+ \item Control networks coupled to Metabolism
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}\frametitle{Boolean Networks} 
+\begin{itemize}
+\item Boolean Networks as Models for gene interaction networks
+\item Several boolean functions can be used, we focus only on threshold functions
+\item Every node $i$ has a state $\sigma_i^t$ at time $t$ and they are synchronously updated according to the Heaviside function
+\end{itemize} 
+\begin{equation}
+\sigma_i^{t+1} = \Theta(\sum_{j}\omega_{ji}\sigma_j^t - \theta_i)
+\end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{Coupling two Networks}
+\begin{itemize}
+ \item Two different directions: Signalling and Catalysis
+ \item Gene regulatory network senses metabolites present in the environment and respond to them
+\end{itemize}
+\vspace{-10mm}
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[scale=0.45,transform shape]
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A1) at (0:3.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B1) at (45:3.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,fill=orange] (1) at (90:3.4cm) {1};
+  \node[draw,circle,inner sep=0.15cm, magenta] (2) at (135:3.4cm) {2};
+  \node[draw,circle,inner sep=0.15cm, magenta] (3) at (180:3.4cm) {3};
+  \node[draw,circle,inner sep=0.15cm, magenta] (4) at (225:3.4cm) {4};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (5) at (270:3.4cm) {5};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (6) at (315:3.4cm) {6};
+
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,fill=orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,blue] (C) at (9cm,-1.3cm) {C};
+  \node[draw,circle,inner sep=0.15cm] (D) at (10.5cm,-1.3cm) {D};
+  \node[draw,circle,inner sep=0.15cm] (E) at (12cm,-1.3cm) {E};
+  \node[draw,shape=rectangle,inner sep=0.15cm] (R2) at (10.5cm,-2.6cm) {R2};
+  \node[draw,circle,inner sep=0.15cm] (F) at (9.7cm,-4cm) {F};
+  \node[draw,circle,inner sep=0.15cm] (G) at (11.3cm,-4cm) {G};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+  \draw[shorten >=0.1cm,-latex] (C) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (D) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (E) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (R2) edge (F);
+  \draw[shorten >=0.1cm,-latex] (R2) edge (G);
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=0,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=45,densely dashed,looseness=1.5] (1);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (1);
+  \draw[shorten >=0.1cm,-|] (A1) edge (3);
+  \draw[shorten >=0.1cm,-|] (A1) edge (4);
+  \draw[shorten >=0.1cm,-latex] (A1) edge (5);
+  \draw[shorten >=0.1cm,-|] (B1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (3);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (4);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (5);
+  \draw[shorten >=0.1cm,-|] (B1) edge (6);
+  \draw[shorten >=0.1cm,-latex] (1) edge [loop above] (1);
+  \draw[shorten >=0.1cm,-|] (1) edge (3);
+  \draw[shorten >=0.1cm,-latex] (1) edge [bend left=5] (5);
+  \draw[shorten >=0.1cm,-latex] (1) edge (6);
+  \draw[shorten >=0.1cm,-|] (2) edge (1);
+  \draw[shorten >=0.1cm,-latex] (2) edge [loop left] (2);
+  \draw[shorten >=0.1cm,-latex] (2) edge (5);
+  \draw[shorten >=0.1cm,-|] (3) edge (5);
+  \draw[shorten >=0.1cm,-latex] (4) edge (2);
+  \draw[shorten >=0.1cm,-latex] (5) edge [bend left=5] (1);
+  \draw[shorten >=0.1cm,-|] (5) edge (4);
+  \draw[shorten >=0.1cm,-latex] (5) edge [loop below] (5);
+  \draw[shorten >=0.1cm,-latex] (6) edge (3);
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}\frametitle{Population Dynamics}
+\begin{itemize}
+ \item This is the internal structure of an organism
+ \item Population dynamics and Evolution
+ \item Biomass accumulation, enzyme fraction penalty and division threshold
+ \item Fitness is implicitly defined
+\end{itemize} 
+\end{frame}
+
+\section{Simplest Case}
+\begin{frame}\frametitle{Learning AND function}
+ \begin{itemize}
+  \item In this setting, the selective pressure to learn depends on the environment
+  \item Oscillating environment forces population to learn AND function
+ \end{itemize}
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[scale=0.8,transform shape]
+  
+  \node[draw,circle,inner sep=0.15cm,green] (A1) at (45:1.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B1) at (135:1.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,orange] (1) at (225:1.4cm) {1};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (2) at (315:1.4cm) {2};
+
+  \node[draw,circle,inner sep=0.15cm,green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,blue] (C) at (9cm,-1.3cm) {C};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=45,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=22,densely dashed,looseness=0.5] (1);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (1);
+  \draw[shorten >=0.1cm,-|] (2) edge (1);
+  \draw[shorten >=0.1cm,-latex] (2) edge [loop below] (2);
+
+\end{tikzpicture}}
+
+
+
+
+\end{frame}
+
+\begin{frame}\frametitle{Learning AND function}
+ \begin{itemize}
+  \item In this setting, the selective pressure to learn depends on the environment
+  \item Oscillating environment forces population to learn AND function
+ \end{itemize}
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[scale=0.8,transform shape]
+  
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A1) at (54:1.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B1) at (126:1.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,magenta] (1) at (198:1.4cm) {1};
+  \node[draw,circle,inner sep=0.15cm, orange] (2) at (270:1.4cm) {2};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (3) at (342:1.4cm) {3};
+
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,blue] (C) at (9cm,-1.3cm) {C};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=45,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=0,densely dashed,looseness=1.0] (2);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (2);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (2);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (1);
+  \draw[shorten >=0.1cm,-|] (B1) edge (3);
+  \draw[shorten >=0.1cm,-|] (A1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (A1) edge (3);
+  \draw[shorten >=0.1cm,-|] (1) edge (2);
+  \draw[shorten >=0.1cm,-|] (3) edge (2);
+
+
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}\frametitle{Learning AND function}
+ \begin{itemize}
+  \item In this setting, the selective pressure to learn depends on the environment
+  \item Oscillating environment forces population to learn AND function
+ \end{itemize}
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[scale=0.8,transform shape]
+  
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A1) at (30:1.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,fill=green] (B1) at (150:1.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,fill=orange] (1) at (270:1.4cm) {1};
+  \node (label) at (270:2cm) {$\theta_1 = 1$};
+
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,fill=green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,fill=orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,fill=blue] (C) at (9cm,-1.3cm) {C};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=45,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=22,densely dashed,looseness=0.5] (1);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (1);
+
+
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Landscape}
+ \begin{itemize}
+  \item The landscape topology is defined, but the fitness of each genotype depends on the environment
+  \item For an oscillatory environment, the best solution will be the AND function 
+  \item The topology is a cartesian product between a Hamming graph and a path graph
+ \end{itemize}
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[scale=0.2]
+
+\node[draw,circle,inner sep=0.05cm] (0) at (-9.9,-8.8) {};   
+\node[draw,circle,inner sep=0.05cm] (1) at (-4,-8) {};%
+\node[draw,circle,inner sep=0.05cm] (2) at (1.1,-8.8) {};
+\node[draw,circle,inner sep=0.05cm] (3) at (-5,-5) {};%
+\node[draw,circle,inner sep=0.05cm] (4) at (0.5,-6) {};%%
+\node[draw,circle,inner sep=0.05cm] (5) at (5,-5) {};%
+\node[draw,circle,inner sep=0.05cm] (6) at (-1.1,-2.2) {};
+\node[draw,circle,inner sep=0.05cm] (7) at (4,-2) {};%
+\node[draw,circle,inner sep=0.05cm] (8) at (9.9,-2.2) {};
+\node[draw,circle,inner sep=0.05cm] (9) at (-9,-3) {};%
+\node[draw,circle,inner sep=0.05cm] (10) at (-4.7,-3.3) {};%%
+\node[draw,circle,inner sep=0.05cm] (11) at (1,-3) {};%
+\node[draw,circle,inner sep=0.05cm] (12) at (-5.7,-0.2) {};%%
+\node[draw,circle,inner sep=0.05cm] (13) at (0,0) {};%                                       
+\node[draw,circle,inner sep=0.05cm] (14) at (5.7,-0.2) {};%%                                       
+\node[draw,circle,inner sep=0.05cm] (15) at (-1,3) {};%                                    
+\node[draw,circle,inner sep=0.05cm] (16) at (3.9,3.3) {};%%
+\node[draw,circle,inner sep=0.05cm] (17) at (9,3) {};%
+\node[draw,circle,inner sep=0.05cm] (18) at (-9.9,2.2) {};
+\node[draw,circle,inner sep=0.05cm] (19) at (-4,2) {};%
+\node[draw,circle,inner sep=0.05cm] (20) at (1.1,2.2) {};
+\node[draw,circle,inner sep=0.05cm] (21) at (-5,5) {};%
+\node[draw,circle,inner sep=0.05cm] (22) at (0.5,6) {};%%
+\node[draw,circle,inner sep=0.05cm] (23) at (5,5) {};%
+\node[draw,circle,inner sep=0.05cm] (24) at (-1.1,8.8) {};
+\node[draw,circle,inner sep=0.05cm] (25) at (4,8) {};%
+\node[draw,circle,inner sep=0.05cm] (26) at (9.9,8.8) {};
+
+\draw (0) edge (1);
+\draw (1) edge (2);
+\draw (2) edge (0);
+\draw (3) edge (4);
+\draw (4) edge (5);
+\draw (5) edge (3);
+\draw (6) edge (7);
+\draw (7) edge (8);
+\draw (8) edge (6);
+\draw (9) edge (10);
+\draw (10) edge (11);
+\draw (11) edge (9);
+\draw (12) edge (13);
+\draw (13) edge (14);
+\draw (14) edge (12);
+\draw (15) edge (16);
+\draw (16) edge (17);
+\draw (17) edge (15);
+\draw (18) edge (19);
+\draw (19) edge (20);
+\draw (20) edge (18);
+\draw (21) edge (22);
+\draw (22) edge (23);
+\draw (23) edge (21);
+\draw (24) edge (25);
+\draw (25) edge (26);
+\draw (26) edge (24);
+
+\draw (0) edge (3);
+\draw (3) edge (6);
+\draw (6) edge (0);
+\draw (1) edge (4);
+\draw (4) edge (7);
+\draw (7) edge (1);
+\draw (2) edge (5);
+\draw (5) edge (8);
+\draw (8) edge (2);
+\draw (9) edge (12);
+\draw (12) edge (15);
+\draw (15) edge (9);
+\draw (10) edge (13);
+\draw (13) edge (16);
+\draw (16) edge (10);
+\draw (11) edge (14);
+\draw (14) edge (17);
+\draw (17) edge (11);
+\draw (18) edge (21);
+\draw (21) edge (24);
+\draw (24) edge (18);
+\draw (19) edge (22);
+\draw (22) edge (25);
+\draw (25) edge (19);
+\draw (20) edge (23);
+\draw (23) edge (26);
+\draw (26) edge (20);
+
+\draw (0) edge (9);
+\draw (9) edge (18);
+\draw (18) edge (0);
+\draw (1) edge (10);
+\draw (10) edge (19);
+\draw (19) edge (1);
+\draw (2) edge (11);
+\draw (11) edge (20);
+\draw (20) edge (2);
+\draw (3) edge (12);
+\draw (12) edge (21);
+\draw (21) edge (3);
+\draw (4) edge (13);
+\draw (13) edge (22);
+\draw (22) edge (4);
+\draw (5) edge (14);
+\draw (14) edge (23);
+\draw (23) edge (5);
+\draw (6) edge (15);
+\draw (15) edge (24);
+\draw (24) edge (6);
+\draw (7) edge (16);
+\draw (16) edge (25);
+\draw (25) edge (7);
+\draw (8) edge (17);
+\draw (17) edge (26);
+\draw (26) edge (8);
+
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Genotype to Phenotype Mapping}
+ \begin{itemize}
+  \item Mapping also depends on environment
+  \item We allow thresholds to vary from $-5$ to $4$
+  \item For the oscillatory environment, $270$ different genotypes produce only $8$ different phenotype categories
+ \end{itemize}
+
+\end{frame}
+
+
+\section{Results}
+\subsection{Linear Description}
+\begin{frame}\frametitle{Attractor structure}
+\begin{itemize}
+\item Different attractors depending on the division mechanism of the population 
+\item 
+\end{itemize} 
+\end{frame}
+
+\subsection{Lists II}
+\begin{frame}\frametitle{numbered lists}
+\begin{enumerate}
+\item Introduction to  \LaTeX  
+\item Course 2 
+\item Termpapers and presentations with \LaTeX 
+\item Beamer class
+\end{enumerate}
+\end{frame}
+
+\begin{frame}\frametitle{numbered lists with pause}
+\begin{enumerate}
+\item Introduction to  \LaTeX \pause 
+\item Course 2 \pause 
+\item Termpapers and presentations with \LaTeX \pause 
+\item Beamer class
+\end{enumerate}
+\end{frame}
+
+\section{Section no.3} 
+\subsection{Tables}
+\begin{frame}\frametitle{Tables}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Date} & \textbf{Instructor} & \textbf{Title} \\
+\hline
+WS 04/05 & Sascha Frank & First steps with  \LaTeX  \\
+\hline
+SS 05 & Sascha Frank & \LaTeX \ Course serial \\
+\hline
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}\frametitle{Tables with pause}
+\begin{tabular}{c c c}
+A & B & C \\ 
+\pause 
+1 & 2 & 3 \\  
+\pause 
+A & B & C \\ 
+\end{tabular} 
+\end{frame}
+
+
+\section{Section no. 4}
+\subsection{blocs}
+\begin{frame}\frametitle{blocs}
+
+\begin{block}{title of the bloc}
+bloc text
+\end{block}
+
+\begin{exampleblock}{title of the bloc}
+bloc text
+\end{exampleblock}
+
+
+\begin{alertblock}{title of the bloc}
+bloc text
+\end{alertblock}
+\end{frame}
+
+\section{Section no. 5}
+\subsection{split screen}
+
+\begin{frame}\frametitle{splitting screen}
+\begin{columns}
+\begin{column}{5cm}
+\begin{itemize}
+\item Beamer 
+\item Beamer Class 
+\item Beamer Class Latex 
+\end{itemize}
+\end{column}
+\begin{column}{5cm}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Instructor} & \textbf{Title} \\
+\hline
+Sascha Frank &  \LaTeX \ Course 1 \\
+\hline
+Sascha Frank &  Course serial  \\
+\hline
+\end{tabular}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\subsection{Pictures} 
+\begin{frame}\frametitle{pictures in latex beamer class}
+
+
+\end{frame}
+
+\subsection{joining picture and lists} 
+
+\begin{frame}
+\frametitle{pictures and lists in beamer class}
+\begin{tikzpicture}[scale=0.8,transform shape]
+  
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A1) at (54:1.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B1) at (126:1.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,magenta] (1) at (198:1.4cm) {1};
+  \node[draw,circle,inner sep=0.15cm, orange] (2) at (270:1.4cm) {2};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (3) at (342:1.4cm) {3};
+
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,blue] (C) at (9cm,-1.3cm) {C};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=45,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=0,densely dashed,looseness=1.0] (2);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (2);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (2);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (1);
+  \draw[shorten >=0.1cm,-|] (B1) edge (3);
+  \draw[shorten >=0.1cm,-|] (A1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (A1) edge (3);
+  \draw[shorten >=0.1cm,-|] (1) edge (2);
+  \draw[shorten >=0.1cm,-|] (3) edge (2);
+
+
+\end{tikzpicture}
+\end{frame}
+
+
+\subsection{pictures which need more space} 
+\begin{frame}[plain]
+\frametitle{plain, or a way to get more space}
+\begin{tikzpicture}[scale=0.7,transform shape]
+  
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A1) at (0:3.4cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B1) at (45:3.4cm) {B};
+  \node[draw,circle,inner sep=0.15cm,fill=orange] (1) at (90:3.4cm) {1};
+  \node[draw,circle,inner sep=0.15cm, magenta] (2) at (135:3.4cm) {2};
+  \node[draw,circle,inner sep=0.15cm, magenta] (3) at (180:3.4cm) {3};
+  \node[draw,circle,inner sep=0.15cm, magenta] (4) at (225:3.4cm) {4};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (5) at (270:3.4cm) {5};
+  \node[draw,circle,inner sep=0.15cm, fill=magenta] (6) at (315:3.4cm) {6};
+
+  \node[draw,circle,inner sep=0.15cm,fill=green] (A2) at (8cm,1cm) {A};
+  \node[draw,circle,inner sep=0.15cm,green] (B2) at (10cm,1cm) {B};
+  \node[draw,shape=rectangle,inner sep=0.15cm,fill=orange] (R) at (9cm,0cm) {R1};
+  \node[draw,circle,inner sep=0.15cm,blue] (C) at (9cm,-1.3cm) {C};
+  \node[draw,circle,inner sep=0.15cm] (D) at (10.5cm,-1.3cm) {D};
+  \node[draw,circle,inner sep=0.15cm] (E) at (12cm,-1.3cm) {E};
+  \node[draw,shape=rectangle,inner sep=0.15cm] (R2) at (10.5cm,-2.6cm) {R2};
+  \node[draw,circle,inner sep=0.15cm] (F) at (9.7cm,-4cm) {F};
+  \node[draw,circle,inner sep=0.15cm] (G) at (11.3cm,-4cm) {G};
+
+  \draw[shorten >=0.1cm,-latex] (A2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (B2) edge (R);
+  \draw[shorten >=0.1cm,-latex] (R) edge (C);
+  \draw[shorten >=0.1cm,-latex] (C) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (D) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (E) edge (R2);
+  \draw[shorten >=0.1cm,-latex] (R2) edge (F);
+  \draw[shorten >=0.1cm,-latex] (R2) edge (G);
+
+
+
+  \path (A2) edge[-latex,green, out=180, in=0,densely dashed,looseness=0.5] (A1)
+        (B2) edge[-latex,green, out=135, in=0,densely dashed,looseness=0.7] (B1)
+        (R) edge[latex-,orange, out=180, in=45,densely dashed,looseness=1.5] (1);
+
+  \draw[shorten >=0.1cm,-latex] (A1) edge (1);
+  \draw[shorten >=0.1cm,-|] (A1) edge (3);
+  \draw[shorten >=0.1cm,-|] (A1) edge (4);
+  \draw[shorten >=0.1cm,-latex] (A1) edge (5);
+  \draw[shorten >=0.1cm,-|] (B1) edge (1);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (3);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (4);
+  \draw[shorten >=0.1cm,-latex] (B1) edge (5);
+  \draw[shorten >=0.1cm,-|] (B1) edge (6);
+  \draw[shorten >=0.1cm,-latex] (1) edge [loop above] (1);
+  \draw[shorten >=0.1cm,-|] (1) edge (3);
+  \draw[shorten >=0.1cm,-latex] (1) edge [bend left=5] (5);
+  \draw[shorten >=0.1cm,-latex] (1) edge (6);
+  \draw[shorten >=0.1cm,-|] (2) edge (1);
+  \draw[shorten >=0.1cm,-latex] (2) edge [loop left] (2);
+  \draw[shorten >=0.1cm,-latex] (2) edge (5);
+  \draw[shorten >=0.1cm,-|] (3) edge (5);
+  \draw[shorten >=0.1cm,-latex] (4) edge (2);
+  \draw[shorten >=0.1cm,-latex] (5) edge [bend left=5] (1);
+  \draw[shorten >=0.1cm,-|] (5) edge (4);
+  \draw[shorten >=0.1cm,-latex] (5) edge [loop below] (5);
+  \draw[shorten >=0.1cm,-latex] (6) edge (3);
+
+\end{tikzpicture}
+\end{frame}
+
+
+
+\end{document}

@@ -1,0 +1,2 @@
+constant_size('minimum',Constants.env_dict['minimum'],periodic_method,4)	organised2013/minimum/periodic/mutation/
+constant_size('minimum',Constants.env_dict['minimum'],periodic_random_method,4)	organised2013/minimum/periodic_random/mutation/
